@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Required meta tags-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- Your app title -->
+<title>Serket</title>
+<!-- Path to Framework7 Library CSS-->
+<link rel="stylesheet" href="css/framework7.css">
+<!-- Path to your custom app styles-->
+<link rel="stylesheet" href="css/main.css">
+
+<link rel="stylesheet" href="css/loader.css">
+
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic); 
+@import url(http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.page{
+  background: #fff;
+}
+.list-block.media-list .item-media, 
+.list-block li.media-item .item-media {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.list-block .item-content{
+  padding-left: 0;
+  border-bottom: 1px solid #CFD8DC;
+}
+.color-green{
+  width: 80px;
+  height: 8px;
+  position: absolute;
+  top: 5px;
+  left: 0;
+  background-color: #B2FF59;
+}
+.navbar,
+.navbar .center,
+.navbar .left,
+.navbar .right {
+  color:#81D4FA;
+  background: #fff;
+  background-color: #404040;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 18px;
+  border-bottom: none;
+}
+.navbar:after{
+  background: none;
+}
+body{
+  font-family: Roboto;
+  font-weight: 400;
+  color:#2e2f33;
+}
+
+#userListContainter{
+  min-height: 500px;
+}
+</style>
+</head>
+  <body>
+    <!-- Status bar overlay for full screen mode (PhoneGap) -->
+    <div class="statusbar-overlay"></div>
+    <!-- Views -->
+    <div class="views">
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main">
+        <!-- Top Navbar-->
+        <div class="navbar">
+          <div class="navbar-inner">
+            <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
+            <div class="left">Serket</div>
+          </div>
+        </div>
+        <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <div class="pages navbar-through toolbar-through">
+          <!-- Page, "data-page" contains page name -->
+          <div data-page="index" class="page">
+            <!-- Scrollable page content -->
+            <div class="page-content">
+
+
+              <p>Page content goes here</p>
+              <!-- Link to another page -->
+              <a href="about.html">About app</a>
+
+              <div class="list-block media-list">
+                <ul id="userListContainter">
+
+
+                  <div class="loader">
+                    <i class="fa ion-medkit"></i>
+                    <div class="shadow"></div>
+                  </div>
+
+
+                </ul>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+    <script id="userListTemplate" type="text/template7">
+      <li class="item-content patient_entry" id="{{seed}}">
+        <div class="item-media">
+          <div class="color-green"></div>
+          <img src="{{user.picture.medium}}" width="80">
+        </div>
+        <div class="item-inner">
+          <div class="item-title-row">
+            <div class="item-title"
+              style="color:#1E88E5;
+              font-size:18px;
+              font-weight:500;
+              text-transform: capitalize;">
+              {{user.name.first}} {{user.name.last}}
+            </div>
+          </div>
+          <div class="item-subtitle"
+            style="color:#2e2f33;
+              font-size:12px;
+              font-weight:400;
+              text-transform: capitalize;">
+            {{user.gender}} {{user.age}} {{user.dobStr}}
+          </div>
+          <div class="item-text"
+            style="color:#546E7A;
+              font-size:13px;
+              font-weight:500;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus.
+          </div>
+        </div>
+      </li>
+    </script>
+
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="js/framework7.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="js/main.js"></script>
+    <!-- underscore js library -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script type="text/javascript">
+    /* global
+    console, $$, _, moment,
+    Framework7, Dom7, Template7
+    */
+    var usersArr;
+    var userListHtml = '';
+
+
+
+    // Initialize app and store it to myApp variable for futher access to its methods
+    var F7App = new Framework7({
+      precompileTemplates: true
+    });
+
+    // We need to use custom DOM library, let's save it to $$ variable:
+    var $$ = Dom7;
+     
+    // Add view
+    var mainView = F7App.addView('.view-main', {
+      // Because we want to use dynamic navbar, we need to enable it for this view:
+      dynamicNavbar: true
+    });
+     
+    // Now we need to run the code that will be executed only for About page.
+     
+    // Option 1. Using page callback for page (for "about" page in this case) (recommended way):
+    F7App.onPageInit('about', function (page) {
+      // Do something here for "about" page
+    });
+
+    //patient entry clicl/touch handler
+    $$(document).on('click', '.patient_entry', function(el){
+      var patientID = $$(this).attr('id');
+      var patienObj = _.findWhere(usersArr, {'seed': patientID});
+      console.log('selected patient -');
+      console.log(patienObj);
+    });
+
+
+    $$.ajax({
+      url: 'users.json',
+      dataType: 'json',
+      success: function(data){
+        usersArr = _.sample(data.results, 20);
+        console.log(usersArr);
+
+        _.each(usersArr, function(v) {
+          var dob   = moment.unix(parseInt(v.user.dob));
+          var today = moment();
+          v.user.age    = today.diff(dob, 'years');
+          v.user.dobStr = dob.format('MM/DD/YYYY');
+          userListHtml  += Template7.templates.userListTemplate(v);
+          console.log(v);
+        });
+
+        _.delay(function(){
+          $$('#userListContainter').html(userListHtml);
+        }, 400);
+      }
+    });
+
+
+
+
+
+  
+
+
+    </script>
+  </body>
+</html> 
