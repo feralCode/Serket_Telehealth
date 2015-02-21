@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <!-- Your app title -->
-<title>Serket</title>
+<title>Eir</title>
 <!-- Path to Framework7 Library CSS-->
 <link rel="stylesheet" href="css/framework7.css">
 <!-- Path to your custom app styles-->
@@ -47,6 +47,22 @@
   left: 0;
   background-color: #B2FF59;
 }
+.color-orange{
+  width: 80px;
+  height: 8px;
+  position: absolute;
+  top: 5px;
+  left: 0;
+  background-color: #FFD740;
+}
+.color-red{
+  width: 80px;
+  height: 8px;
+  position: absolute;
+  top: 5px;
+  left: 0;
+  background-color: #FF5252;
+}
 .navbar,
 .navbar .center,
 .navbar .left,
@@ -67,7 +83,25 @@ body{
   font-weight: 400;
   color:#2e2f33;
 }
-
+/*search bar css*/
+.search_bar{
+  height: 45px;
+  width: 100%;
+  background-color: #fff;
+  border: none;
+   om: 1px solid #888
+}
+.search_bar input{
+  height: 45px;
+  width: 100%;
+  font-size: 16px;line-height: 41px;
+  font-weight: 300;
+  background-color: #fff;
+  color:#01579B;
+  padding: 2px 0 0 8px;margin: 0;
+  text-align: left;
+  border: none;
+}
 #userListContainter{
   min-height: 500px;
 }
@@ -84,7 +118,7 @@ body{
         <div class="navbar">
           <div class="navbar-inner">
             <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-            <div class="left">Serket</div>
+            <div class="left">Eir</div>
           </div>
         </div>
         <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -100,6 +134,18 @@ body{
               <a href="about.html">About app</a>
 
               <div class="list-block media-list">
+                <!-- search bar container -->
+                <div class="row no-gutter search_bar"> 
+                  <input type="search" 
+                    autocomplete="off" 
+                    autocorrect="off" 
+                    autocapitalize="off" 
+                    spellcheck="false" 
+                    placeholder="Search by Name, MRN or Policy ID"
+                    style="width:100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;" />
+                </div>
                 <ul id="userListContainter">
 
 
@@ -121,7 +167,7 @@ body{
     <script id="userListTemplate" type="text/template7">
       <li class="item-content patient_entry" id="{{seed}}">
         <div class="item-media">
-          <div class="color-green"></div>
+          <div class="color-{{color}}"></div>
           <img src="{{user.picture.medium}}" width="80">
         </div>
         <div class="item-inner">
@@ -150,82 +196,332 @@ body{
       </li>
     </script>
 
-    <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="js/framework7.js"></script>
-    <!-- Path to your app js-->
-    <script type="text/javascript" src="js/main.js"></script>
-    <!-- underscore js library -->
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <script type="text/javascript">
-    /* global
-    console, $$, _, moment,
-    Framework7, Dom7, Template7
-    */
-    var usersArr;
-    var userListHtml = '';
+    <script type="text/template7" id="patientDetailsTemplate">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Back</span></a></div>
+          <div class="center sliding">About</div>
+          <div class="right">
+            <!-- Right link contains only icon - additional "icon-only" class--><a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="pages">
+        <!-- Page, data-page contains page name-->
+        <div data-page="about" class="page">
+          <!-- Scrollable page content-->
+          <div class="page-content">
+            <div class="content-block">
+              <div class="content-block-inner">
+                <p>{{user.name.first}} {{user.name.last}}</p>
+                {{#each camera}}
+                  <div class="button camera_capture" id="{{deviceGuid}}">Take Pic</div>
+                {{/each}}
+                
+                <p>Go <a href="#" class="back">back</a> or click  <a href="#" class="create-page">here </a>to create dynamic page.</p>
+                <p>Mauris posuere sit amet metus id venenatis. Ut ante dolor, tempor nec commodo rutrum, varius at sem. Nullam ac nisi non neque ornare pretium. Nulla mauris mauris, consequat et elementum sit amet, egestas sed orci. In hac habitasse platea dictumst.</p>
+                <p>Fusce eros lectus, accumsan eget mi vel, iaculis tincidunt felis. Nulla tincidunt pharetra sagittis. Fusce in felis eros. Nulla sit amet aliquam lorem, et gravida ipsum. Mauris consectetur nisl non sollicitudin tristique. Praesent vitae metus ac quam rhoncus mattis vel et nisi. Aenean aliquet, felis quis dignissim iaculis, lectus quam tincidunt ligula, et venenatis turpis risus sed lorem. Morbi eu metus elit. Ut vel diam dolor.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</script>
+
+<!-- Path to Framework7 Library JS-->
+<script type="text/javascript" src="js/framework7.js"></script>
+<!-- Path to your app js-->
+<script type="text/javascript" src="js/main.js"></script>
+<!-- underscore js library -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script type="text/javascript">
+/* global
+console, alert,  $$, _, moment,
+Framework7, Dom7, Template7
+*/
+var usersArr;
+var userListHtml = '';
 
 
 
-    // Initialize app and store it to myApp variable for futher access to its methods
-    var F7App = new Framework7({
-      precompileTemplates: true
-    });
+// Initialize app and store it to myApp variable for futher access to its methods
+var F7App = new Framework7({
+  precompileTemplates: true
+});
 
-    // We need to use custom DOM library, let's save it to $$ variable:
-    var $$ = Dom7;
-     
-    // Add view
-    var mainView = F7App.addView('.view-main', {
-      // Because we want to use dynamic navbar, we need to enable it for this view:
-      dynamicNavbar: true
-    });
-     
-    // Now we need to run the code that will be executed only for About page.
-     
-    // Option 1. Using page callback for page (for "about" page in this case) (recommended way):
-    F7App.onPageInit('about', function (page) {
-      // Do something here for "about" page
-    });
-
-    //patient entry clicl/touch handler
-    $$(document).on('click', '.patient_entry', function(el){
-      var patientID = $$(this).attr('id');
-      var patienObj = _.findWhere(usersArr, {'seed': patientID});
-      console.log('selected patient -');
-      console.log(patienObj);
-    });
+// We need to use custom DOM library, let's save it to $$ variable:
+var $$ = Dom7;
+ 
+// Add view
+var mainView = F7App.addView('.view-main', {
+  // Because we want to use dynamic navbar, we need to enable it for this view:
+  dynamicNavbar: true
+});
+ 
+// Now we need to run the code that will be executed only for About page.
+ 
+// Option 1. Using page callback for page (for "about" page in this case) (recommended way):
+F7App.onPageInit('about', function (page) {
+  // Do something here for "about" page
+});
 
 
+
+/////////////////////////////////////////////////////////////////////
+//////// ATT ISH
+/////////////////////////////////////////////////////////////////////
+var config = {
+  domain: 'DL',
+  userId: '553474807',
+  password: 'NO-PASSWD',
+  appKey: 'GE_3201594B1AB180B2_1',
+  Table:  2,
+  baseUrl: 'https://systest.digitallife.att.com:443/penguin/api/'
+};
+var cameraArr = [];
+var doorLockArr   = [];
+
+
+/*
+class DeviceConnection
+USER_ID = '553474442'
+PASSWORD = 'NO-PASSWD'
+APP_KEY = 'DE_154EB6D6BB79A8D8_1'
+BASE_URL = 'https://systest.digitallife.att.com:443'
+
+
+// PROD
+config.userId = '553290699';
+config.password = 'NO-PASSWD';
+
+// Final Presentation Keys
+config.userId = '553290699';
+config.appKey = 'JE_B926A9F0F2CB8654_1';
+config.password = 'NO-PASSWD';
+config.authToken = 'ca85a1ae48906dee064bf48231335673112aeb15249cf157f046c0096b0296a0a36599019c78b74060ad94fe68d18cf010c34145154baa412e753b3fd5';
+config.requestToken = 'd7b94785d0aeccb4c09df65b4f4e6300';
+config.gatewayId = '31A0E161074C49A7A9939B5C2B099FFF';
+
+https://systest.digitallife.att.com:443/penguin/api/authtokens?userId=553474807&password=NO-PASSWD&domain=DL&appKey=GE_3201594B1AB180B2_1
+
+
+var runFinalPresentation = function() {
+  performAction('PE00000008','switch','on');
+  performAction('PE00000005','switch','on');
+  performAction('DL00000007','lock','unlock');
+};
+
+var resetFinalPresentation = function() {
+  performAction('PE00000008','switch','off');
+  performAction('PE00000005','switch','off');
+  performAction('DL00000007','lock','lock');
+};
+*/
+
+
+var lockClickHandler = function() {
+  var lockGuid = $$(this).attr('id');
+  performAction(lockGuid, 'lock', 'lock');
+};
+
+var unlockClickHandler = function() {
+  var lockGuid = $$(this).attr('id');
+  performAction(lockGuid, 'lock', 'unlock');
+};
+
+var takePicClickHandler = function() {
+  var cameraGuild = $$(this).attr('id');
+  performAction(cameraGuild, 'capture', 'image');
+};
+
+
+var performAction = function(guid, action, value) {
+  console.log(guid, action, value);
+  //$('#status').text('Sending Action: '+value);
+  $$.ajax({
+    url: (config.baseUrl + 
+      config.gatewayId + 
+      '/devices/' + guid + '/' + 
+      action + '/' + value),
+    dataType: 'json',
+    async:  false,
+    type: 'POST',
+    headers: {
+    'Authtoken': config.authToken,
+    'Appkey': config.appKey,
+    'Requesttoken': config.requestToken,
+    'Content-Type': 'multipart/form-data'
+    },
+    success: function(response) {
+      console.log(response);
+    },
+    error: function(err) {
+      //console.log(JSON.stringify(err));
+    }
+  });
+};
+
+var getCameraUrls = function() {
+  _.each(cameraArr, function(c) {
     $$.ajax({
-      url: 'users.json',
+      url: (config.baseUrl +
+        config.gatewayId +
+        '/getCameraURLs/' + 
+        c.deviceGuid),
       dataType: 'json',
-      success: function(data){
-        usersArr = _.sample(data.results, 20);
-        console.log(usersArr);
-
-        _.each(usersArr, function(v) {
-          var dob   = moment.unix(parseInt(v.user.dob));
-          var today = moment();
-          v.user.age    = today.diff(dob, 'years');
-          v.user.dobStr = dob.format('MM/DD/YYYY');
-          userListHtml  += Template7.templates.userListTemplate(v);
-          console.log(v);
-        });
-
-        _.delay(function(){
-          $$('#userListContainter').html(userListHtml);
-        }, 400);
+      async:  false,
+      type: 'GET',
+      headers: {
+        'Authtoken': config.authToken,
+        'Appkey': config.appKey,
+        'Requesttoken': config.requestToken
+      },
+      success: function(response) {
+        console.log(response);
+      },
+      error: function(err) {
+        console.log(JSON.stringify(err));
       }
     });
+  });
+};
+var getDevices = function() {
+  //$$('#status').text('Getting Devices');
+  $$.ajax({
+    url: (config.baseUrl +
+      config.gatewayId+
+      '/devices'),
+    dataType: 'json',
+    async:  false,
+    type: 'GET',
+    headers: {
+      'Authtoken': config.authToken,
+      'Appkey': config.appKey,
+      'Requesttoken': config.requestToken
+    },
+    success: function(response) {
+      //console.log(response);
+      cameraArr   = _.where(response.content, {'deviceType':'camera'});
+      doorLockArr = _.where(response.content, {'deviceType':'door-lock'});
+      console.log(cameraArr);
+    },
+    error: function(err) {
+      console.log(JSON.stringify(err));
+    }
+  });
+};
+
+$$.ajax({
+  url: (config.baseUrl + 
+    'authtokens?' + 
+    'userId='+config.userId+
+    '&password=' + config.password + 
+    '&domain=' + config.domain + 
+    '&appKey=' + config.appKey),
+  dataType: 'json',
+  async:  false,
+  type: 'POST',
+  success: function(response) {
+    console.log(response);
+    config.authToken = response.content.authToken;
+    config.requestToken = response.content.requestToken;
+    config.gatewayId = response.content.gateways[0].id;
+
+    getDevices();
+    getCameraUrls();
+
+  },
+  error: function(err) {
+    console.log(JSON.stringify(err));
+  }
+});
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+//////// search features
+/////////////////////////////////////////////////////////////////////
+var renderPatientList = function(patientArr) {
+
+};
+
+var searchPatientList = function(patientArr) {
+
+};
+
+
+var doSearch = function() { 
+  var searchStr = $$('.search_bar input').val();
+  //_Model.search(searchStr);
+};
+//debounce the search method to get search bar text value
+var onSearch = _.debounce(doSearch, 450, {'trailing': true});
+//search bar events
+$$('.search_bar input').on('paste change blur keyup', onSearch);
+
+
+/////////////////////////////////////////////////////////////////////
+// patient entry clicl/touch handler
+/////////////////////////////////////////////////////////////////////
+
+$$(document).on('click', '.patient_entry', function(el){
+  var patientID = $$(this).attr('id');
+  var patienObj = _.findWhere(usersArr, {'seed': patientID});
+  console.log('selected patient -');
+  console.log(patienObj);
+  //compile and load template
+  var html = Template7.templates.patientDetailsTemplate(patienObj);
+  mainView.loadContent(html);
+});
+
+$$(document).on('click', '.camera_capture', takePicClickHandler);
+
+var colorsArr = ['red', 'green', 'blue'];
+$$.ajax({
+  url: 'users.json',
+  dataType: 'json',
+  success: function(data){
+    usersArr = _.sample(data.results, 20);
+    //console.log(usersArr);
+
+    _.each(usersArr, function(v) {
+      var rand  = _.random(0, 100);
+      var dob   = moment.unix(parseInt(v.user.dob));
+      var today = moment();
+      v.user.age    = today.diff(dob, 'years');
+      v.user.dobStr = dob.format('MM/DD/YYYY');
+      v.camera = cameraArr;
+      v.color = 'green';
+
+      if(rand > 60 && rand < 90){
+        v.color = 'orange';
+      }
+      if(rand > 90) {
+        v.color = 'red';
+      }
+      userListHtml  += Template7.templates.userListTemplate(v);
+      //console.log(v);
+    });
+
+    _.delay(function(){
+      $$('#userListContainter').html(userListHtml);
+    }, 400);
+  }
+});
 
 
 
 
 
-  
 
 
-    </script>
-  </body>
+
+
+
+
+
+</script>
+</body>
 </html> 
